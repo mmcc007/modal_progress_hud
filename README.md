@@ -85,7 +85,7 @@ See the [example application](https://github.com/mmcc007/modal_progress_hud/tree
 for a complete sample app using the modal progress HUD.
 
 ## Demo
-![Demo](https://github.com/mmcc007/modal_progress_hud/tree/master/modal_progress_hud.gif)*See example for details*
+![Demo](https://github.com/mmcc007/modal_progress_hud/blob/master/modal_progress_hud.gif)*See example for details*
 
 ## Issues and feedback
 

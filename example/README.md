@@ -5,5 +5,5 @@ that makes calls to a backend. Also shows method to manage form
 verification with async calls.
 
 ## Demo
-![Demo](https://github.com/mmcc007/modal_progress_hud/tree/master/modal_progress_hud.gif)*See example for details*
+![Demo](https://github.com/mmcc007/modal_progress_hud/blob/master/modal_progress_hud.gif)
 
