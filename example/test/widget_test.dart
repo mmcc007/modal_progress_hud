@@ -7,8 +7,7 @@ void main() {
     await tester.pumpWidget(new MyApp());
 
     // tap the submit button and trigger a frame
-    await tester.tap(find.text('Save'));
+    await tester.tap(find.text('Login'));
     await tester.pump(new Duration(seconds: 4));
-
   });
 }

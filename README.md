@@ -81,8 +81,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
 ## Example
 
-See the [example application](https://github.com/mmcc007/modal_progress_hud/tree/master/modal_progress_hud/example) source
-for a complete sample app using the Firebase authentication.
+See the [example application](https://github.com/mmcc007/modal_progress_hud/tree/master/example) source
+for a complete sample app using the modal progress HUD.
+
+## Demo
+![Demo](https://github.com/mmcc007/modal_progress_hud/tree/master/modal_progress_hud.gif)*See example for details*
 
 ## Issues and feedback
 
