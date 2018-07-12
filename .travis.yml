@@ -14,6 +14,9 @@ before_script:
   - ./flutter/bin/flutter doctor
 script:
   - ./flutter/bin/flutter test
+  - cd example
+  - ../flutter/bin/flutter test
+  - ../flutter/bin/flutter drive --target test_driver/main.dart
 cache:
   directories:
     - $HOME/.pub-cache

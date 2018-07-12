@@ -77,9 +77,7 @@ class _LoginPageState extends State<LoginPage> {
       });
 
       // Simulate a service call
-      print('submitting to backend...');
       Future.delayed(Duration(seconds: 1), () {
-        print('response from backend');
         setState(() {
           _isLoggedIn = false;
           if (_actualLoginData.userName == _validLoginData.userName)
@@ -110,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(32.0, 4.0, 32.0, 4.0),
             child: TextFormField(
+              key: Key('username'),
               initialValue: _actualLoginData.userName,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
@@ -124,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(32.0, 4.0, 32.0, 32.0),
             child: TextFormField(
+              key: Key('password'),
               obscureText: true,
               initialValue: _actualLoginData.userName,
               keyboardType: TextInputType.text,
@@ -137,6 +137,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           RaisedButton(
+            key: Key('login'),
             onPressed: _submit,
             child: Text('Login'),
           ),
@@ -145,10 +146,12 @@ class _LoginPageState extends State<LoginPage> {
             child: _isLoggedIn
                 ? Text(
                     'Login successful!',
+                    key: Key('loggedIn'),
                     style: TextStyle(fontSize: 20.0),
                   )
                 : Text(
                     'Not logged in',
+                    key: Key('notLoggedIn'),
                     style: TextStyle(fontSize: 20.0),
                   ),
           ),
