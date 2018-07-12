@@ -12,17 +12,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SettingsPage(),
+      home: LoginPage(),
     );
   }
 }
 
-class SettingsPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   // manage state of modal progress HUD widget
   bool _inAsyncCall = false;
@@ -52,8 +52,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // validate password
   String _validatePassword(String password) {
-    print('validating password');
-
     if (password.length < 8) {
       return 'Password must be at least 8 characters';
     }
@@ -67,7 +65,6 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _submit() {
-    print('submit called...');
     if (_loginFormKey.currentState.validate()) {
       _loginFormKey.currentState.save();
 
@@ -85,13 +82,13 @@ class _SettingsPageState extends State<SettingsPage> {
         print('response from backend');
         setState(() {
           _isLoggedIn = false;
-          if (_actualLoginData.userName == _validLoginData.userName) {
+          if (_actualLoginData.userName == _validLoginData.userName)
             _isValidUserName = true;
-          } else
+          else
             _isValidUserName = false;
-          if (_actualLoginData.password == _validLoginData.password) {
+          if (_actualLoginData.password == _validLoginData.password)
             _isValidPassword = true;
-          } else
+          else
             _isValidPassword = false;
           if (_isValidUserName && _isValidPassword) _isLoggedIn = true;
           // stop the modal progress HUD
@@ -148,9 +145,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: _isLoggedIn
                 ? Text(
                     'Login successful!',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                    ),
+                    style: TextStyle(fontSize: 20.0),
                   )
                 : Text(
                     'Not logged in',
@@ -172,6 +167,7 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ModalProgressHUD(
         child: _buildWidget(),
         inAsyncCall: _inAsyncCall,
+        // demo of additional parameters
         opacity: 0.5,
         valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
       ),
