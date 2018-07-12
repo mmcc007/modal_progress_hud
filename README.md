@@ -1,14 +1,22 @@
 # modal_progress_hud
 
-A simple widget wrapper to enable modal progress HUD(progress indicator)
+A simple widget wrapper to enable modal progress HUD (a modal progress indicator)
 
 [![pub package](https://img.shields.io/pub/v/modal_progress_hud.svg)](https://pub.dartlang.org/packages/modal_progress_hud)
-
+[![Build Status - Travis][0]][1]
 
 Inspired by [this](https://codingwithjoe.com/flutter-how-to-build-a-modal-progress-indicator/) article.
 
-## Usage
 
+## Demo
+![Demo](https://github.com/mmcc007/modal_progress_hud/blob/master/modal_progress_hud.gif)
+
+*See example for details*
+
+## Usage
+```
+ModalProgressHUD(child: _buildWidget(), inAsyncCall: _saving)
+```
 Simply wrap the widget as a child of `ModalProgressHUD`, typically a form, together with a boolean
 maintained in local state.
 On first loading, the boolean is false, and the child is displayed.
@@ -72,7 +80,7 @@ class _SettingsPageState extends State<SettingsPage> {
         title: new Text('Flutter Progress Indicator Demo'),
         backgroundColor: Colors.blue,
       ),
-      body: ModalProgressHUD(child: _buildWidget(), saving: _saving),
+      body: ModalProgressHUD(child: _buildWidget(), inAsyncCall: _saving),
     );
   }
 }
@@ -85,11 +93,6 @@ See the [example application](https://github.com/mmcc007/modal_progress_hud/tree
 for a complete sample app using the modal progress HUD. Included in the
 example is a method for using a form's validators while making async
 calls.
-
-## Demo
-![Demo](https://github.com/mmcc007/modal_progress_hud/blob/master/modal_progress_hud.gif)
-
-*See example for details*
 
 ## Issues and feedback
 

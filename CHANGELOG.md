@@ -1,3 +1,6 @@
+## [0.0.5]
+* Changed layout of README and corrected spelling
+
 ## [0.0.4]
 * Updated README
 
@@ -5,7 +8,7 @@
 * Fixed location of demo gif file
 
 ## [0.0.2]
-* Example of use of modal progress hud with login screen, form and async calls.
+* Added example of use of modal progress hud with login screen, form and async calls.
 
 ## [0.0.1] - July 10, 2018
 

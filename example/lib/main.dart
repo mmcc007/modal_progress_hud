@@ -166,7 +166,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Modal Progess HUD Demo'),
+        title: Text('Modal Progress HUD Demo'),
         backgroundColor: Colors.blue,
       ),
       body: ModalProgressHUD(
