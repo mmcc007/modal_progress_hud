@@ -3,7 +3,7 @@
 A simple widget wrapper to enable modal progress HUD (a modal progress indicator)
 
 [![pub package](https://img.shields.io/pub/v/modal_progress_hud.svg)](https://pub.dartlang.org/packages/modal_progress_hud)
-[![Build Status - Travis][0]][1]
+[![Build Status](https://travis-ci.org/mmcc007/modal_progress_hud.svg?branch=master)](https://travis-ci.org/mmcc007/modal_progress_hud)
 
 Inspired by [this](https://codingwithjoe.com/flutter-how-to-build-a-modal-progress-indicator/) article.
 
