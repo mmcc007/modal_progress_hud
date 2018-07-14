@@ -16,7 +16,7 @@ void main() {
             Expanded(child: Container()),
           ],
         ),
-        inAsyncCall: false,
+        inAsyncCall: true,
       ),
     ));
   });
