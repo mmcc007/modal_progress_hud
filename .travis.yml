@@ -16,7 +16,7 @@ before_script:
 script:
   - ./flutter/bin/flutter test --coverage
   - cd example
-  - ../flutter/bin/flutter test --coverage
+  - ../flutter/bin/flutter test
 #  - ../flutter/bin/flutter drive --target test_driver/main.dart
 after_success:
   - coveralls-lcov coverage/lcov.info
