@@ -17,7 +17,8 @@ matrix:
     - env: FLUTTER_VERSION=dev
 before_script:
   - git clone https://github.com/flutter/flutter.git -b $FLUTTER_VERSION
-  - ./flutter/bin/flutter doctor
+  - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
+  - flutter doctor
   - gem install coveralls-lcov
 script:
   - bash scripts/runTests.sh
