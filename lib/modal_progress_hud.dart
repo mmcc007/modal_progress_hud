@@ -7,7 +7,7 @@ class ModalProgressHUD extends StatelessWidget {
   final bool inAsyncCall;
   final double opacity;
   final Color color;
-  final Animation<Color> valueColor;
+  final ProgressIndicator progressIndicator;
 
   ModalProgressHUD({
     Key key,
@@ -15,7 +15,7 @@ class ModalProgressHUD extends StatelessWidget {
     @required this.inAsyncCall,
     this.opacity = 0.3,
     this.color = Colors.grey,
-    this.valueColor,
+    this.progressIndicator = const CircularProgressIndicator(),
   }) : super(key: key);
 
   @override
@@ -30,9 +30,7 @@ class ModalProgressHUD extends StatelessWidget {
             child: ModalBarrier(dismissible: false, color: color),
           ),
           new Center(
-            child: new CircularProgressIndicator(
-              valueColor: valueColor,
-            ),
+            child: progressIndicator,
           ),
         ],
       );

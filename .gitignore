@@ -13,3 +13,4 @@ ios/Runner/GeneratedPluginRegistrant.*
 # coverage
 coverage/
 example/coverage/
+lcov.info
