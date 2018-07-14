@@ -212,12 +212,12 @@ class LoginData {
   bool loggedIn;
   LoginData({this.userName, this.password, this.loggedIn = false});
 
-  @override
-  String toString() {
-    return 'LoginData{\n'
-        '\tuserName = $userName\n'
-        '\tpassword = $password\n'
-        '\tloggedIn = $loggedIn\n'
-        '}';
-  }
+//  @override
+//  String toString() {
+//    return 'LoginData{\n'
+//        '\tuserName = $userName\n'
+//        '\tpassword = $password\n'
+//        '\tloggedIn = $loggedIn\n'
+//        '}';
+//  }
 }
