@@ -1,3 +1,8 @@
+## [0.0.6]
+* Pass any progress indicator
+* Added tests and code coverage
+* Refactoring for tests
+
 ## [0.0.5]
 * Changed layout of README and corrected spelling
 
