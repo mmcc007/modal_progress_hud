@@ -33,7 +33,7 @@ void main() {
     await tester.tap(login);
 
     // Verify user is not logged-in.
-    expect(loginData.loggedIn, isFalse);
+    expect(loginData.isLoggedIn, isFalse);
     expect(loginData.userName, isNot(secretLoginData.userName));
     expect(loginData.password, isNot(secretLoginData.password));
   });
@@ -58,7 +58,7 @@ void main() {
     await tester.pump(Duration(seconds: 1));
 
     // Verify
-    expect(loginData.loggedIn, isFalse);
+    expect(loginData.isLoggedIn, isFalse);
     expect(loginData.userName, isNot(secretLoginData.userName));
     expect(loginData.password, isNot(secretLoginData.password));
   });
@@ -83,7 +83,7 @@ void main() {
     await tester.pump(Duration(seconds: 1));
 
     // Verify
-    expect(loginData.loggedIn, isTrue);
+    expect(loginData.isLoggedIn, isTrue);
     expect(loginData.userName, secretLoginData.userName);
     expect(loginData.password, secretLoginData.password);
   });

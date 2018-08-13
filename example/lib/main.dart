@@ -84,16 +84,20 @@ class _LoginPageState extends State<LoginPage> {
       // Simulate a service call
       Future.delayed(Duration(seconds: 1), () {
         setState(() {
-          if (loginData.userName == _validLoginData.userName)
+          if (loginData.userName == _validLoginData.userName) {
             _isValidUserName = true;
-          else
+            // only validate password if username exists in database
+            if (loginData.password == _validLoginData.password)
+              _isValidPassword = true;
+            else
+              _isValidPassword = false;
+          } else {
             _isValidUserName = false;
-          if (loginData.password == _validLoginData.password)
+            // no such user, so password validator not triggered
             _isValidPassword = true;
-          else
-            _isValidPassword = false;
+          }
           if (_isValidUserName && _isValidPassword) {
-            loginData.loggedIn = true;
+            loginData.isLoggedIn = true;
           }
           // stop the modal progress HUD
           _inAsyncCall = false;
@@ -188,7 +192,7 @@ class LoginForm extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(32.0, 32.0, 32.0, 4.0),
-            child: loginData.loggedIn
+            child: loginData.isLoggedIn
                 ? Text(
                     'Login successful!',
                     key: Key('loggedIn'),
@@ -209,15 +213,6 @@ class LoginForm extends StatelessWidget {
 class LoginData {
   String userName;
   String password;
-  bool loggedIn;
-  LoginData({this.userName, this.password, this.loggedIn = false});
-
-//  @override
-//  String toString() {
-//    return 'LoginData{\n'
-//        '\tuserName = $userName\n'
-//        '\tpassword = $password\n'
-//        '\tloggedIn = $loggedIn\n'
-//        '}';
-//  }
+  bool isLoggedIn;
+  LoginData({this.userName, this.password, this.isLoggedIn = false});
 }

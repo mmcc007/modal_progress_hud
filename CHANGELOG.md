@@ -1,3 +1,6 @@
+## [0.1.0]
+* Added support for Dart 2.0
+
 ## [0.0.6]
 * Pass any progress indicator
 * Added tests and code coverage

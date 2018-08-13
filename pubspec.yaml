@@ -1,11 +1,11 @@
 name: modal_progress_hud
-description: A modal progress HUD (a modal progress indicator).
-version: 0.0.6
+description: A modal progress HUD (a modal progress indicator). Wrap this widget around another widget to manage the presentation of a modal spinner that disables access to the underlying widget while an async call is being made.
+version: 0.1.0
 author: Maurice McCabe <mmcc007@gmail.com>
 homepage: https://github.com/mmcc007/modal_progress_hud
 
 environment:
-  sdk: ">=1.19.0 <2.0.0"
+  sdk: '>=1.20.1 <3.0.0'
 
 dependencies:
   flutter:

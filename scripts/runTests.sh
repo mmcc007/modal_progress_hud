@@ -4,14 +4,12 @@ runTests () {
   if [ -f "pubspec.yaml" ]
   then
     flutter test --coverage
-    if [ $1 == "." ]
-    then
-      cat coverage/lcov.info > lcov.info
-    else
-      sed -i "s/lib/${1:2}\/lib/g" coverage/lcov.info
-      cat coverage/lcov.info >> ../lcov.info
-    fi
+    sed "s/^SF:lib/SF:${1:2}\/lib/g" coverage/lcov.info >> $2/lcov.info
   fi
 }
 export -f runTests
-find . -maxdepth 1 -type d -exec bash -c 'runTests "$0"' {} \;
+# if running locally
+if [ -f "lcov.info" ]; then
+  rm lcov.info
+fi
+find . -maxdepth 1 -type d -exec bash -c 'runTests "$0" `pwd`' {} \;
