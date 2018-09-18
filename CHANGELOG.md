@@ -1,3 +1,7 @@
+## [0.1.1]
+* Added option to position progress indicator
+* Refactored example
+
 ## [0.1.0]
 * Added support for Dart 2.0
 

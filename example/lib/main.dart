@@ -13,28 +13,29 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: LoginPage(
-        loginData: LoginData(),
+        inputLoginData: LoginData(),
       ),
     );
   }
 }
 
 class LoginPage extends StatefulWidget {
-  final LoginData loginData;
-  LoginPage({@required this.loginData});
+  final LoginData inputLoginData;
+  LoginPage({@required this.inputLoginData});
   @override
-  _LoginPageState createState() => _LoginPageState(loginData: loginData);
+  _LoginPageState createState() =>
+      _LoginPageState(inputLoginData: inputLoginData);
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final LoginData loginData;
-  _LoginPageState({this.loginData});
+  final LoginData inputLoginData;
+  _LoginPageState({this.inputLoginData});
 
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   // manage state of modal progress HUD widget
   bool _inAsyncCall = false;
 
-  final LoginData _validLoginData = LoginData(
+  final LoginData _serverLoginData = LoginData(
     userName: 'username1',
     password: 'password1',
   );
@@ -84,10 +85,10 @@ class _LoginPageState extends State<LoginPage> {
       // Simulate a service call
       Future.delayed(Duration(seconds: 1), () {
         setState(() {
-          if (loginData.userName == _validLoginData.userName) {
+          if (inputLoginData.userName == _serverLoginData.userName) {
             _isValidUserName = true;
             // only validate password if username exists in database
-            if (loginData.password == _validLoginData.password)
+            if (inputLoginData.password == _serverLoginData.password)
               _isValidPassword = true;
             else
               _isValidPassword = false;
@@ -97,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
             _isValidPassword = true;
           }
           if (_isValidUserName && _isValidPassword) {
-            loginData.isLoggedIn = true;
+            inputLoginData.isLoggedIn = true;
           }
           // stop the modal progress HUD
           _inAsyncCall = false;
@@ -114,12 +115,11 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.blue,
       ),
       body: ModalProgressHUD(
-        child: LoginForm(
-          loginFormKey: _loginFormKey,
-          submit: _submit,
-          loginData: loginData,
-          validateUserName: _validateUserName,
-          validatePassword: _validatePassword,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: buildLoginForm(context),
+          ),
         ),
         inAsyncCall: _inAsyncCall,
         // demo of some additional parameters
@@ -128,71 +128,54 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
 
-class LoginForm extends StatelessWidget {
-  final GlobalKey<FormState> loginFormKey;
-  final LoginData loginData;
-  final Function validateUserName;
-  final Function validatePassword;
-  final Function submit;
-  LoginForm({
-    @required this.loginFormKey,
-    @required this.submit,
-    @required this.loginData,
-    @required this.validateUserName,
-    @required this.validatePassword,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildLoginForm(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     final TextTheme textTheme = themeData.textTheme;
     // run the validators on reload
-    loginFormKey.currentState?.validate();
+    _loginFormKey.currentState?.validate();
     return Form(
-      key: this.loginFormKey,
+      key: this._loginFormKey,
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(32.0, 4.0, 32.0, 4.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               key: Key('username'),
-              initialValue: loginData.userName,
-              keyboardType: TextInputType.text,
               decoration: InputDecoration(
                   hintText: 'enter username', labelText: 'User Name'),
               style: TextStyle(fontSize: 20.0, color: textTheme.button.color),
-              validator: validateUserName,
+              validator: _validateUserName,
               onSaved: (String value) {
-                loginData.userName = value;
+                inputLoginData.userName = value;
               },
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(32.0, 4.0, 32.0, 32.0),
+            padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               key: Key('password'),
               obscureText: true,
-              initialValue: loginData.userName,
-              keyboardType: TextInputType.text,
               decoration: InputDecoration(
                   hintText: 'enter password', labelText: 'Password'),
               style: TextStyle(fontSize: 20.0, color: textTheme.button.color),
-              validator: validatePassword,
+              validator: _validatePassword,
               onSaved: (String value) {
-                loginData.password = value;
+                inputLoginData.password = value;
               },
             ),
           ),
-          RaisedButton(
-            key: Key('login'),
-            onPressed: submit,
-            child: Text('Login'),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: RaisedButton(
+              key: Key('login'),
+              onPressed: _submit,
+              child: Text('Login'),
+            ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(32.0, 32.0, 32.0, 4.0),
-            child: loginData.isLoggedIn
+            padding: const EdgeInsets.all(8.0),
+            child: inputLoginData.isLoggedIn
                 ? Text(
                     'Login successful!',
                     key: Key('loggedIn'),

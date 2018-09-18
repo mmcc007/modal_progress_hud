@@ -21,7 +21,7 @@ void main() {
     final loginData = LoginData();
     await tester.pumpWidget(new MaterialApp(
       theme: ThemeData(),
-      home: LoginPage(loginData: loginData),
+      home: LoginPage(inputLoginData: loginData),
     ));
 
     await tester.tap(userName);
@@ -43,7 +43,7 @@ void main() {
     await tester.pumpWidget(
       new MaterialApp(
         theme: ThemeData(),
-        home: LoginPage(loginData: loginData),
+        home: LoginPage(inputLoginData: loginData),
       ),
     );
 
@@ -68,7 +68,7 @@ void main() {
     await tester.pumpWidget(
       new MaterialApp(
         theme: ThemeData(),
-        home: LoginPage(loginData: loginData),
+        home: LoginPage(inputLoginData: loginData),
       ),
     );
 
