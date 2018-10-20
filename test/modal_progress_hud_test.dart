@@ -7,17 +7,20 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 void main() {
   testWidgets('sends events to modal progress hud',
       (WidgetTester tester) async {
+    final text = 'testing';
     // Build our app and trigger a frame.
     await tester.pumpWidget(MaterialApp(
       home: new ModalProgressHUD(
         child: Flex(
           direction: Axis.horizontal,
           children: <Widget>[
-            Expanded(child: Container()),
+            Expanded(child: Text(text)),
           ],
         ),
         inAsyncCall: true,
       ),
     ));
+    expect(find.text(text), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }

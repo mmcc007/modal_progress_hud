@@ -13,34 +13,36 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: LoginPage(
-        inputLoginData: LoginData(),
+        onSignIn: () => print('login successful!'),
       ),
     );
   }
 }
 
 class LoginPage extends StatefulWidget {
-  final LoginData inputLoginData;
-  LoginPage({@required this.inputLoginData});
+  final VoidCallback _onSignIn;
+
+  LoginPage({@required onSignIn})
+      : assert(onSignIn != null),
+        _onSignIn = onSignIn;
+
   @override
-  _LoginPageState createState() =>
-      _LoginPageState(inputLoginData: inputLoginData);
+  _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final LoginData inputLoginData;
-  _LoginPageState({this.inputLoginData});
-
+  // maintains validators and state of form fields
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
-  // manage state of modal progress HUD widget
-  bool _inAsyncCall = false;
 
-  final LoginData _serverLoginData = LoginData(
-    userName: 'username1',
-    password: 'password1',
-  );
-  bool _isValidUserName = true; // managed by response from server
-  bool _isValidPassword = true; // managed by response from server
+  // manage state of modal progress HUD widget
+  bool _isInAsyncCall = false;
+
+  bool _isInvalidAsyncUser = false; // managed after response from server
+  bool _isInvalidAsyncPass = false; // managed after response from server
+
+  String _username;
+  String _password;
+  bool _isLoggedIn = false;
 
   // validate user name
   String _validateUserName(String userName) {
@@ -48,8 +50,9 @@ class _LoginPageState extends State<LoginPage> {
       return 'Username must be at least 8 characters';
     }
 
-    if (!_isValidUserName) {
-      _isValidUserName = true;
+    if (_isInvalidAsyncUser) {
+      // disable message until after next async call
+      _isInvalidAsyncUser = false;
       return 'Incorrect user name';
     }
 
@@ -62,8 +65,9 @@ class _LoginPageState extends State<LoginPage> {
       return 'Password must be at least 8 characters';
     }
 
-    if (!_isValidPassword) {
-      _isValidPassword = true;
+    if (_isInvalidAsyncPass) {
+      // disable message until after next async call
+      _isInvalidAsyncPass = false;
       return 'Incorrect password';
     }
 
@@ -74,35 +78,40 @@ class _LoginPageState extends State<LoginPage> {
     if (_loginFormKey.currentState.validate()) {
       _loginFormKey.currentState.save();
 
-      // dismiss keyboard
+      // dismiss keyboard during async call
       FocusScope.of(context).requestFocus(new FocusNode());
 
       // start the modal progress HUD
       setState(() {
-        _inAsyncCall = true;
+        _isInAsyncCall = true;
       });
 
       // Simulate a service call
       Future.delayed(Duration(seconds: 1), () {
+        final _accountUsername = 'username1';
+        final _accountPassword = 'password1';
         setState(() {
-          if (inputLoginData.userName == _serverLoginData.userName) {
-            _isValidUserName = true;
-            // only validate password if username exists in database
-            if (inputLoginData.password == _serverLoginData.password)
-              _isValidPassword = true;
-            else
-              _isValidPassword = false;
+          if (_username == _accountUsername) {
+            _isInvalidAsyncUser = false;
+            if (_password == _accountPassword) {
+              // username and password are correct
+              _isInvalidAsyncPass = false;
+              _isLoggedIn = true;
+            } else
+              // username is correct, but password is incorrect
+              _isInvalidAsyncPass = true;
           } else {
-            _isValidUserName = false;
-            // no such user, so password validator not triggered
-            _isValidPassword = true;
-          }
-          if (_isValidUserName && _isValidPassword) {
-            inputLoginData.isLoggedIn = true;
+            // incorrect username and have not checked password result
+            _isInvalidAsyncUser = true;
+            // no such user, so no need to trigger async password validator
+            _isInvalidAsyncPass = false;
           }
           // stop the modal progress HUD
-          _inAsyncCall = false;
+          _isInAsyncCall = false;
         });
+        if (_isLoggedIn)
+          // do something
+          widget._onSignIn();
       });
     }
   }
@@ -114,6 +123,8 @@ class _LoginPageState extends State<LoginPage> {
         title: Text('Modal Progress HUD Demo'),
         backgroundColor: Colors.blue,
       ),
+      // display modal progress HUD (heads-up display, or indicator)
+      // when in async call
       body: ModalProgressHUD(
         child: SingleChildScrollView(
           child: Container(
@@ -121,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
             child: buildLoginForm(context),
           ),
         ),
-        inAsyncCall: _inAsyncCall,
+        inAsyncCall: _isInAsyncCall,
         // demo of some additional parameters
         opacity: 0.5,
         progressIndicator: CircularProgressIndicator(),
@@ -130,9 +141,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildLoginForm(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-    final TextTheme textTheme = themeData.textTheme;
-    // run the validators on reload
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    // run the validators on reload to process async results
     _loginFormKey.currentState?.validate();
     return Form(
       key: this._loginFormKey,
@@ -146,9 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'enter username', labelText: 'User Name'),
               style: TextStyle(fontSize: 20.0, color: textTheme.button.color),
               validator: _validateUserName,
-              onSaved: (String value) {
-                inputLoginData.userName = value;
-              },
+              onSaved: (value) => _username = value,
             ),
           ),
           Padding(
@@ -160,22 +168,19 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'enter password', labelText: 'Password'),
               style: TextStyle(fontSize: 20.0, color: textTheme.button.color),
               validator: _validatePassword,
-              onSaved: (String value) {
-                inputLoginData.password = value;
-              },
+              onSaved: (value) => _password = value,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(32.0),
             child: RaisedButton(
-              key: Key('login'),
               onPressed: _submit,
               child: Text('Login'),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: inputLoginData.isLoggedIn
+            child: _isLoggedIn
                 ? Text(
                     'Login successful!',
                     key: Key('loggedIn'),
@@ -191,11 +196,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
-
-class LoginData {
-  String userName;
-  String password;
-  bool isLoggedIn;
-  LoginData({this.userName, this.password, this.isLoggedIn = false});
 }

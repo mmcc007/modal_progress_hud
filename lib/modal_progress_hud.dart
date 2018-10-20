@@ -9,6 +9,7 @@ class ModalProgressHUD extends StatelessWidget {
   final Color color;
   final Widget progressIndicator;
   final Offset offset;
+  final bool dismissible;
 
   ModalProgressHUD({
     Key key,
@@ -18,6 +19,7 @@ class ModalProgressHUD extends StatelessWidget {
     this.color = Colors.grey,
     this.progressIndicator = const CircularProgressIndicator(),
     this.offset,
+    this.dismissible = false,
   })  : assert(child != null),
         assert(inAsyncCall != null),
         _child = child,
@@ -26,25 +28,27 @@ class ModalProgressHUD extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetList = new List<Widget>();
+    List<Widget> widgetList = [];
     widgetList.add(_child);
-    Widget layOutProgressIndicator = new Center(child: progressIndicator);
-    if (offset != null) {
-      layOutProgressIndicator = new Positioned(
-        child: progressIndicator,
-        left: offset.dx,
-        top: offset.dy,
-      );
-    }
     if (_inAsyncCall) {
+      Widget layOutProgressIndicator;
+      if (offset == null)
+        layOutProgressIndicator = new Center(child: progressIndicator);
+      else {
+        layOutProgressIndicator = new Positioned(
+          child: progressIndicator,
+          left: offset.dx,
+          top: offset.dy,
+        );
+      }
       final modal = [
         new Opacity(
+          child: new ModalBarrier(dismissible: dismissible, color: color),
           opacity: opacity,
-          child: new ModalBarrier(dismissible: false, color: color),
         ),
         layOutProgressIndicator
       ];
-      widgetList.addAll(modal);
+      widgetList += modal;
     }
     return new Stack(
       children: widgetList,
