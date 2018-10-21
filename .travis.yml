@@ -22,6 +22,7 @@ jobs:
       os: osx
       before_install:
       after_success:
+      env: unit-test-beta-osx
     - <<: *unit-test-stage
       env: branch=dev
       after_success:
@@ -37,6 +38,7 @@ jobs:
       dist: trusty
       language: generic
       os: linux
+      env: integration-test-linux
       # Run integration tests on android
       before_install: &before_install_linux
         - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
@@ -106,4 +108,6 @@ jobs:
 
   allow_failures:
     - env: branch=dev
-    - os: osx
+    - env: unit-test-beta-osx
+    - env: integration-test-linux
+

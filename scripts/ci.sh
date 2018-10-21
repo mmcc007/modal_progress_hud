@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+set -e
 
 show_help() {
     printf "\n\nusage: $0 [--get] [--analyze] [--ios] [--apk] [--driver] [--clean] [<path to app package>]
