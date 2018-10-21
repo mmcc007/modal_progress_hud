@@ -110,6 +110,8 @@ jobs:
 
   allow_failures:
     - env: branch=dev
-    - env: unit-test-beta-osx
+    - env:
+      - branch=beta
+      - unit-test-beta-osx
     - env: integration-test-linux
 
