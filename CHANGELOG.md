@@ -1,3 +1,7 @@
+## [0.1.2]
+* Added option to dismiss modal
+* Refactored example
+
 ## [0.1.1]
 * Added option to position progress indicator
 * Refactored example
