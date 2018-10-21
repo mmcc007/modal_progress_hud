@@ -5,19 +5,37 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 void main() {
-  testWidgets('sends events to modal progress hud',
-      (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MaterialApp(
+  final text = 'testing';
+
+  Widget sut(bool inAsyncCall) {
+    return MaterialApp(
       home: new ModalProgressHUD(
         child: Flex(
           direction: Axis.horizontal,
           children: <Widget>[
-            Expanded(child: Container()),
+            Expanded(child: Text(text)),
           ],
         ),
-        inAsyncCall: true,
+        inAsyncCall: inAsyncCall,
       ),
-    ));
+    );
+  }
+
+  testWidgets('should show progress indicator when in async call',
+      (tester) async {
+    final inAsyncCall = true;
+    await tester.pumpWidget(sut(inAsyncCall));
+
+    expect(find.text(text), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  });
+
+  testWidgets('should not show progress indicator when not in async call',
+      (tester) async {
+    final inAsyncCall = false;
+    await tester.pumpWidget(sut(inAsyncCall));
+
+    expect(find.text(text), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 }

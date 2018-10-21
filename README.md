@@ -1,6 +1,6 @@
 # modal_progress_hud
 
-A simple widget wrapper to enable modal progress HUD (a modal progress indicator)
+A simple widget wrapper to enable modal progress HUD (a modal progress indicator, HUD = Heads Up Display)
 
 [![pub package](https://img.shields.io/pub/v/modal_progress_hud.svg)](https://pub.dartlang.org/packages/modal_progress_hud)
 [![Build Status](https://travis-ci.org/mmcc007/modal_progress_hud.svg?branch=master)](https://travis-ci.org/mmcc007/modal_progress_hud)

@@ -3,22 +3,19 @@ import 'package:test/test.dart';
 
 void main() {
   group('app test: ', () {
+    final userSync = 'Username must be at least 8 characters';
+    final userASync = 'Incorrect user name';
+    final passSync = 'Password must be at least 8 characters';
+    final passASync = 'Incorrect password';
+
     FlutterDriver driver;
-    SerializableFinder userName;
-    SerializableFinder password;
-    SerializableFinder login;
-    SerializableFinder notLoggedIn;
+    final userName = find.byValueKey('username');
+    final password = find.byValueKey('password');
+    final login = find.byType('RaisedButton');
+    final notLoggedIn = find.byValueKey('notLoggedIn');
 
     setUpAll(() async {
       driver = await FlutterDriver.connect();
-      userName = find.byValueKey('username');
-      expect(userName, isNotNull);
-      password = find.byValueKey('password');
-      expect(password, isNotNull);
-      login = find.byValueKey('login');
-      expect(login, isNotNull);
-      notLoggedIn = find.byValueKey('notLoggedIn');
-      expect(notLoggedIn, isNotNull);
     });
 
     tearDownAll(() async {
@@ -36,6 +33,13 @@ void main() {
 
       await driver.tap(login);
 
+      // verify sync validators ran
+      driver.waitFor(find.text(userSync));
+      driver.waitFor(find.text(passSync));
+      driver.waitForAbsent(find.text(userASync));
+      driver.waitForAbsent(find.text(passASync));
+
+      // verify not logged in
       String loginStatus = await driver.getText(notLoggedIn);
       expect(loginStatus, equals('Not logged in'));
     });
@@ -51,6 +55,15 @@ void main() {
 
       await driver.tap(login);
 
+      // verify user async validator ran
+      driver.waitForAbsent(find.text(userSync));
+      driver.waitForAbsent(find.text(passSync));
+      driver.waitFor(find.text(userASync));
+      driver.waitForAbsent(find.text(passASync));
+
+      // verify not logged in
+      String loginStatus = await driver.getText(notLoggedIn);
+      expect(loginStatus, equals('Not logged in'));
       final SerializableFinder loggedIn = find.byValueKey('loggedIn');
       await driver.waitForAbsent(loggedIn);
     });
@@ -68,6 +81,12 @@ void main() {
       await driver.waitFor(find.text('password1'));
 
       await driver.tap(login);
+
+      // verify no validator ran
+      driver.waitForAbsent(find.text(userSync));
+      driver.waitForAbsent(find.text(passSync));
+      driver.waitForAbsent(find.text(userASync));
+      driver.waitForAbsent(find.text(passASync));
 
       await driver.waitFor(find.byValueKey('loggedIn'));
       final SerializableFinder loggedIn = find.byValueKey('loggedIn');
