@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x
 
 show_help() {
     printf "\n\nusage: $0 [--get] [--analyze] [--ios] [--apk] [--driver] [--clean] [<path to app package>]
@@ -29,9 +30,9 @@ where:
 # run integration tests
 runDriver () {
     cd $1
-    if [ -f "lib/main.dart" ]; then
+    if [ -f "test_driver/main.dart" ]; then
         echo "Running integration tests in $1..."
-        flutter driver
+        flutter driver test_driver/main.dart
     fi
     exitCode=$?
     cd - > /dev/null
