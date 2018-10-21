@@ -20,11 +20,15 @@ jobs:
       after_success: bash <(curl -s https://codecov.io/bash) -f lcov.info
     - <<: *unit-test-stage
       os: osx
+      before_install:
     - <<: *unit-test-stage
       env: branch=dev
+      after_success:
     - <<: *unit-test-stage
       os: osx
       env: branch=dev
+      before_install:
+      after_success:
 
   allow_failures:
     - env: branch=dev
