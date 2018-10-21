@@ -21,6 +21,7 @@ jobs:
     - <<: *unit-test-stage
       os: osx
       before_install:
+      after_success:
     - <<: *unit-test-stage
       env: branch=dev
       after_success:
@@ -32,3 +33,4 @@ jobs:
 
   allow_failures:
     - env: branch=dev
+    - os: osx
