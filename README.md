@@ -10,7 +10,7 @@ Inspired by [this](https://codingwithjoe.com/flutter-how-to-build-a-modal-progre
 
 
 ## Demo
-![Demo](https://github.com/mmcc007/modal_progress_hud/blob/master/modal_progress_hud.gif)
+![Demo](https://raw.githubusercontent.com/mmcc007/modal_progress_hud/master/modal_progress_hud.gif)
 
 *See example for details*
 
