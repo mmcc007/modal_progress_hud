@@ -90,6 +90,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
 ## Example
 
+Update: see this [article](https://medium.com/@nocnoc/the-secret-to-async-validation-on-flutter-forms-4b273c667c03) on Medium about async form validation
+
 See the [example application](https://github.com/mmcc007/modal_progress_hud/tree/master/example) source
 for a complete sample app using the modal progress HUD. Included in the
 example is a method for using a form's validators while making async
