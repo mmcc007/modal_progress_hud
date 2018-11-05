@@ -7,3 +7,5 @@ verification with async calls (see [flutter/issues/9688](https://github.com/flut
 ## Demo
 ![Demo](https://github.com/mmcc007/modal_progress_hud/blob/master/modal_progress_hud.gif)
 
+
+Update: see this [article](https://medium.com/@nocnoc/the-secret-to-async-validation-on-flutter-forms-4b273c667c03) on Medium about async form validation
