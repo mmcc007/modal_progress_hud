@@ -32,6 +32,14 @@ jobs:
       env: branch=dev
       before_install:
       after_success:
+    - <<: *unit-test-stage
+      env: branch=master
+      after_success:
+    - <<: *unit-test-stage
+      os: osx
+      env: branch=master
+      before_install:
+      after_success:
 
     - &integration-test-stage
       stage: Integration Testing
