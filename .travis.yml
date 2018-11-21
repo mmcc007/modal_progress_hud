@@ -21,15 +21,21 @@ jobs:
       os: osx
       before_install:
       after_success:
-      env:
-        - branch=beta
-        - unit-test-beta-osx
+      env: branch=beta
     - <<: *unit-test-stage
       env: branch=dev
       after_success:
     - <<: *unit-test-stage
       os: osx
       env: branch=dev
+      before_install:
+      after_success:
+    - <<: *unit-test-stage
+      env: branch=master
+      after_success:
+    - <<: *unit-test-stage
+      os: osx
+      env: branch=master
       before_install:
       after_success:
 
@@ -110,7 +116,4 @@ jobs:
 
   allow_failures:
     - env: branch=dev
-    - env:
-      - branch=beta
-      - unit-test-beta-osx
-    - env: integration-test-linux
+    - env: branch=master
