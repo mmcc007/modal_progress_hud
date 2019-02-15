@@ -10,24 +10,71 @@ Inspired by [this](https://codingwithjoe.com/flutter-how-to-build-a-modal-progre
 
 
 ## Demo
+
 ![Demo](https://raw.githubusercontent.com/mmcc007/modal_progress_hud/master/modal_progress_hud.gif)
 
 *See example for details*
 
-## Usage
-```
-ModalProgressHUD(child: _buildWidget(), inAsyncCall: _saving)
-```
-Simply wrap the widget as a child of `ModalProgressHUD`, typically a form, together with a boolean
-maintained in local state.
-On first loading, the boolean is false, and the child is displayed.
-After submitting, and before making the async call, set the local boolean to
-true. The child will redraw and will show the modal progress HUD.
-After
-they async call completes, set the boolean to false. The child will
-redraw without the modal progress indicator.
 
+## Usage
+
+Add the package to your `pubspec.yml` file.
+
+```yml
+dependencies:
+  modal_progress_hud: ^0.1.2
 ```
+
+Next, import the library into your widget.
+
+```dart
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+```
+
+Now, all you have to do is simply wrap your widget as a child of `ModalProgressHUD`, typically a form, together with a boolean that is maintained in local state.
+
+```dart
+...
+bool _saving = false
+...
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+     body: ModalProgressHUD(child: Container(
+       Form(...)
+     ), inAsyncCall: _saving),
+  );
+}
+```
+
+
+## Options
+
+The current parameters are customizable in the constructor
+```dart
+ModalProgressHUD(
+  @required inAsyncCall: bool,
+  @required child: Widget,
+  opacity: double,
+  color: Color,
+  progressIndicator: CircularProgressIndicator,
+  offset: double
+  dismissible: bool,
+);
+```
+
+
+## Example
+
+Here is an example app that demonstrates the usage. 
+
+1. On initial load, `_saving` is false which causes your child widget to display
+2. When the form is submitted, `_saving` is set to true, which will display the modal
+3. Once the async call is complete, `_saving` is set back to false, hiding the modal
+
+
+```dart
 class SettingsPage extends StatefulWidget {
   @override
   _SettingsPageState createState() => new _SettingsPageState();
@@ -88,16 +135,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
 ```
 
-## Example
-
-Update: see this [article](https://medium.com/@nocnoc/the-secret-to-async-validation-on-flutter-forms-4b273c667c03) on Medium about async form validation
+Update: See this [article](https://medium.com/@nocnoc/the-secret-to-async-validation-on-flutter-forms-4b273c667c03) on Medium about async form validation
 
 See the [example application](https://github.com/mmcc007/modal_progress_hud/tree/master/example) source
 for a complete sample app using the modal progress HUD. Included in the
 example is a method for using a form's validators while making async
 calls (see [flutter/issues/9688](https://github.com/flutter/flutter/issues/9688) for details).
 
-## Issues and feedback
+
+### Issues and feedback
 
 Please file [issues](https://github.com/mmcc007/modal_progress_hud/issues/new)
 to send feedback or report a bug. Thank you!

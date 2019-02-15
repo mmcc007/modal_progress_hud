@@ -30,6 +30,7 @@ jobs:
       env: branch=beta
       before_install:
       after_success:
+      env: branch=beta
     - <<: *unit-test-stage
       env: branch=dev
       after_success:
