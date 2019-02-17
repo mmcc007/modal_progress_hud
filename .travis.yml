@@ -5,7 +5,7 @@ jobs:
       stage: Unit Testing
       language: generic
       os: linux
-      env: branch=beta
+      env: branch=stable
       before_install:
          - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
       before_script:
@@ -19,6 +19,15 @@ jobs:
       after_success: bash <(curl -s https://codecov.io/bash) -f lcov.info
     - <<: *unit-test-stage
       os: osx
+      before_install:
+      after_success:
+      env: branch=stable
+    - <<: *unit-test-stage
+      env: branch=beta
+      after_success:
+    - <<: *unit-test-stage
+      os: osx
+      env: branch=beta
       before_install:
       after_success:
       env: branch=beta
@@ -75,7 +84,7 @@ jobs:
         - echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
         - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -gpu swiftshader &
         # install flutter
-        - git clone https://github.com/flutter/flutter.git -b beta
+        - git clone https://github.com/flutter/flutter.git -b stable
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
         - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
         - flutter precache
@@ -99,7 +108,7 @@ jobs:
         - brew install ios-deploy
         - brew install cocoapods || echo 'ignore exit(1)'
         - brew link --overwrite cocoapods
-        - git clone https://github.com/flutter/flutter.git -b beta
+        - git clone https://github.com/flutter/flutter.git -b stable
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
         - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
         - flutter precache
