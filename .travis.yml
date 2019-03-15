@@ -46,12 +46,26 @@ jobs:
       before_install:
       after_success:
     - <<: *unit-test-stage
-      env: channel=master
+      env: branch=master
+      before_script:
+        - git clone https://github.com/flutter/flutter.git -b $branch
+        - export PATH="$PATH":"$HOME/.pub-cache/bin"
+        - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
+        - flutter precache
+        - flutter doctor -v
+        - pub global activate coverage
       after_success:
     - <<: *unit-test-stage
       os: osx
-      env: channel=master
+      env: branch=master
       before_install:
+      before_script:
+        - git clone https://github.com/flutter/flutter.git -b $branch
+        - export PATH="$PATH":"$HOME/.pub-cache/bin"
+        - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
+        - flutter precache
+        - flutter doctor -v
+        - pub global activate coverage
       after_success:
 
     - &integration-test-stage
