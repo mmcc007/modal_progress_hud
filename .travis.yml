@@ -152,4 +152,4 @@ jobs:
 
   allow_failures:
     - env: channel=dev
-    - env: channel=master
+    - env: branch=master
