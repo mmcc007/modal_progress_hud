@@ -5,49 +5,68 @@ jobs:
       stage: Unit Testing
       language: generic
       os: linux
-      env: branch=stable
-      before_install:
+      env: channel=stable
+      before_install: # runs on linux only
+        - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
       before_script:
         # install pre-compiled flutter
-         - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
-        - FLUTTER_CHANNEL=stable
-        - FLUTTER_VERSION=1.2.1-${FLUTTER_CHANNEL}
-        - wget --quiet --output-document=flutter.tar.xz https://storage.googleapis.com/flutter_infra/releases/${FLUTTER_CHANNEL}/linux/flutter_linux_v${FLUTTER_VERSION}.tar.xz && tar xf flutter.tar.xz > /dev/null && rm flutter.tar.xz
+        - FLUTTER_VERSION=1.2.1-${channel}
+        - |
+          if [ $TRAVIS_OS_NAME == "osx" ]; then
+            wget --quiet --output-document=flutter.zip https://storage.googleapis.com/flutter_infra/releases/${channel}/macos/flutter_macos_v${FLUTTER_VERSION}.zip && unzip -qq flutter.zip > /dev/null && rm flutter.zip
+          else
+            wget --quiet --output-document=flutter.tar.xz https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/flutter_linux_v${FLUTTER_VERSION}.tar.xz && tar xf flutter.tar.xz > /dev/null && rm flutter.tar.xz
+          fi
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
         - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
         - flutter doctor -v
-        - pub global activate coverage
+        - |
+          [[ $TRAVIS_OS_NAME != "linux" && channel != "stable" ]] || pub global activate coverage
       script: ./scripts/runTests.sh
       after_success: bash <(curl -s https://codecov.io/bash) -f lcov.info
     - <<: *unit-test-stage
       os: osx
       before_install:
       after_success:
-      env: branch=stable
+      env: channel=stable
     - <<: *unit-test-stage
-      env: branch=beta
+      env: channel=beta
       after_success:
     - <<: *unit-test-stage
       os: osx
-      env: branch=beta
+      env: channel=beta
       before_install:
       after_success:
-      env: branch=beta
+      env: channel=beta
     - <<: *unit-test-stage
-      env: branch=dev
+      env: channel=dev
       after_success:
     - <<: *unit-test-stage
       os: osx
-      env: branch=dev
+      env: channel=dev
       before_install:
       after_success:
     - <<: *unit-test-stage
       env: branch=master
+      before_script:
+        - git clone https://github.com/flutter/flutter.git -b $branch
+        - export PATH="$PATH":"$HOME/.pub-cache/bin"
+        - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
+        - flutter precache
+        - flutter doctor -v
+        - pub global activate coverage
       after_success:
     - <<: *unit-test-stage
       os: osx
       env: branch=master
       before_install:
+      before_script:
+        - git clone https://github.com/flutter/flutter.git -b $branch
+        - export PATH="$PATH":"$HOME/.pub-cache/bin"
+        - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
+        - flutter precache
+        - flutter doctor -v
+        - pub global activate coverage
       after_success:
 
     - &integration-test-stage
@@ -86,9 +105,10 @@ jobs:
         - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -gpu swiftshader &
         # install pre-compiled flutter
         - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
-        - FLUTTER_CHANNEL=stable
-        - FLUTTER_VERSION=1.2.1-${FLUTTER_CHANNEL}
-        - wget --quiet --output-document=flutter.tar.xz https://storage.googleapis.com/flutter_infra/releases/${FLUTTER_CHANNEL}/linux/flutter_linux_v${FLUTTER_VERSION}.tar.xz && tar xf flutter.tar.xz > /dev/null && rm flutter.tar.xz
+        - sdkmanager "platforms;android-28" "build-tools;28.0.3" > /dev/null # required by flutter
+        - channel=stable
+        - FLUTTER_VERSION=1.2.1-${channel}
+        - wget --quiet --output-document=flutter.tar.xz https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/flutter_linux_v${FLUTTER_VERSION}.tar.xz && tar xf flutter.tar.xz > /dev/null && rm flutter.tar.xz
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
         - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
         - flutter doctor -v
@@ -105,16 +125,18 @@ jobs:
       # Run integration tests on ios
       before_install: &before_install_osx
         - open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app
-        - brew update
+        # skip homebrew update
+        - export HOMEBREW_NO_AUTO_UPDATE=1
+#        - brew update
         - brew install libimobiledevice
         - brew install ideviceinstaller
         - brew install ios-deploy
         - brew install cocoapods || echo 'ignore exit(1)'
         - brew link --overwrite cocoapods
         # install pre-compiled flutter
-        - FLUTTER_CHANNEL=stable
-        - FLUTTER_VERSION=1.2.1-${FLUTTER_CHANNEL}
-        - wget --quiet --output-document=flutter.zip https://storage.googleapis.com/flutter_infra/releases/${FLUTTER_CHANNEL}/macos/flutter_macos_v${FLUTTER_VERSION}.zip && unzip -qq flutter.zip > /dev/null && rm flutter.zip
+        - channel=stable
+        - FLUTTER_VERSION=1.2.1-${channel}
+        - wget --quiet --output-document=flutter.zip https://storage.googleapis.com/flutter_infra/releases/${channel}/macos/flutter_macos_v${FLUTTER_VERSION}.zip && unzip -qq flutter.zip > /dev/null && rm flutter.zip
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
         - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
         - flutter doctor -v
@@ -129,5 +151,5 @@ jobs:
 
 
   allow_failures:
-    - env: branch=dev
+    - env: channel=dev
     - env: branch=master
