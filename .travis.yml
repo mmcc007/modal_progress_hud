@@ -20,7 +20,7 @@ jobs:
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
         - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
         - flutter doctor -v
-        - pub global activate coverage
+        - [[ $TRAVIS_OS_NAME != "linux" && channel != "stable" ]] || pub global activate coverage
       script: ./scripts/runTests.sh
       after_success: bash <(curl -s https://codecov.io/bash) -f lcov.info
     - <<: *unit-test-stage
