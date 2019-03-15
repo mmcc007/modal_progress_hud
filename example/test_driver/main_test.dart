@@ -15,7 +15,7 @@ void main() {
     final notLoggedIn = find.byValueKey('notLoggedIn');
 
     setUpAll(() async {
-      driver = await FlutterDriver.connect(timeoutMultiplier: 4);
+      driver = await FlutterDriver.connect();
     });
 
     tearDownAll(() async {
