@@ -95,6 +95,7 @@ jobs:
         - sdkmanager --list | head -15
         # install older packages (for emulator)
 #        - sdkmanager "build-tools;25.0.2" "platforms;android-25" > /dev/null
+        - sdkmanager "platforms;android-28" "build-tools;28.0.3" > /dev/null # required by flutter and emulator
         # Create and start emulator.
         - EMULATOR_API_LEVEL=22
         - ANDROID_ABI="default;armeabi-v7a"
