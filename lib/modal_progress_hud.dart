@@ -54,7 +54,7 @@ class ModalProgressHUD extends StatelessWidget {
     else {
       layOutProgressIndicator = Positioned(
         child: progressIndicator,
-        left: offset.dx
+        left: offset.dx,
         top: offset.dy,
       );
     }
