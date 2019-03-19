@@ -1,6 +1,6 @@
 name: modal_progress_hud
 description: A modal progress indicator widget (HUD = heads-up display). Wrap around another widget to block access to widget during an async call. Also accepts a custom spinner.
-version: 0.1.2
+version: 0.1.3
 author: Maurice McCabe <mmcc007@gmail.com>
 homepage: https://github.com/mmcc007/modal_progress_hud
 

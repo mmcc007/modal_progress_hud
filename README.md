@@ -22,7 +22,7 @@ Add the package to your `pubspec.yml` file.
 
 ```yml
 dependencies:
-  modal_progress_hud: ^0.1.2
+  modal_progress_hud: ^0.1.3
 ```
 
 Next, import the library into your widget.
