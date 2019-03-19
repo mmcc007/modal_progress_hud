@@ -1,3 +1,7 @@
+## [0.1.3]
+* Performance optimization
+* Improved docs
+
 ## [0.1.2]
 * Added option to dismiss modal
 * Refactored example
