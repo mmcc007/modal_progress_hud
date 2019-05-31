@@ -1,3 +1,8 @@
+env:
+  global:
+    - channel=stable
+    - FLUTTER_VERSION=1.5.4-hotfix.2
+
 jobs:
   include:
 
@@ -10,7 +15,7 @@ jobs:
         - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
       before_script:
         # install pre-compiled flutter
-        - FLUTTER_VERSION=1.2.1-${channel}
+        - FLUTTER_VERSION=$FLUTTER_VERSION-${channel}
         - |
           if [ $TRAVIS_OS_NAME == "osx" ]; then
             wget --quiet --output-document=flutter.zip https://storage.googleapis.com/flutter_infra/releases/${channel}/macos/flutter_macos_v${FLUTTER_VERSION}.zip && unzip -qq flutter.zip > /dev/null && rm flutter.zip
@@ -94,6 +99,16 @@ jobs:
         # Platform tools
         - sdkmanager "emulator" "tools" "platform-tools" > /dev/null
         - sdkmanager --list | head -15
+
+        # Download a pinned version of the emulator since upgrades can cause issues
+        - ${ANDROID_HOME}/emulator/emulator -version
+        - emulator_version=5264690 # 29.0.9.0 (build_id 5537588) ==> 28.0.23.0 (build_id 5264690)
+        - curl -fo emulator.zip "https://dl.google.com/android/repository/emulator-linux-$emulator_version.zip"
+        - rm -rf "${ANDROID_HOME}/emulator"
+        - unzip -q emulator.zip -d "${ANDROID_HOME}"
+        - rm -f emulator.zip
+        - ${ANDROID_HOME}/emulator/emulator -version
+
         # install older packages (for emulator)
         - sdkmanager "build-tools;25.0.2" "platforms;android-25" > /dev/null
         # Create and start emulator.
@@ -103,15 +118,16 @@ jobs:
         - sdkmanager --list | head -15
         - echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
         - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -gpu swiftshader &
+
         # install pre-compiled flutter
         - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
         - sdkmanager "platforms;android-28" "build-tools;28.0.3" > /dev/null # required by flutter
-        - channel=stable
-        - FLUTTER_VERSION=1.2.1-${channel}
+        - FLUTTER_VERSION=$FLUTTER_VERSION-${channel}
         - wget --quiet --output-document=flutter.tar.xz https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/flutter_linux_v${FLUTTER_VERSION}.tar.xz && tar xf flutter.tar.xz > /dev/null && rm flutter.tar.xz
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
         - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
         - flutter doctor -v
+
         # Wait for emulator to finish startup.
         - ./scripts/android-wait-for-emulator.sh
         - adb shell input keyevent 82
@@ -133,9 +149,9 @@ jobs:
         - brew install ios-deploy
         - brew install cocoapods || echo 'ignore exit(1)'
         - brew link --overwrite cocoapods
+
         # install pre-compiled flutter
-        - channel=stable
-        - FLUTTER_VERSION=1.2.1-${channel}
+        - FLUTTER_VERSION=$FLUTTER_VERSION-${channel}
         - wget --quiet --output-document=flutter.zip https://storage.googleapis.com/flutter_infra/releases/${channel}/macos/flutter_macos_v${FLUTTER_VERSION}.zip && unzip -qq flutter.zip > /dev/null && rm flutter.zip
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
         - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
@@ -151,5 +167,6 @@ jobs:
 
 
   allow_failures:
+    - env: channel=beta
     - env: channel=dev
     - env: branch=master
