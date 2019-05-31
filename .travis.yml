@@ -121,6 +121,7 @@ jobs:
 
         # install pre-compiled flutter
         - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
+        - sdkmanager "platforms;android-28" "build-tools;28.0.3" > /dev/null # required by flutter
         - FLUTTER_VERSION=$FLUTTER_VERSION-${channel}
         - wget --quiet --output-document=flutter.tar.xz https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/flutter_linux_v${FLUTTER_VERSION}.tar.xz && tar xf flutter.tar.xz > /dev/null && rm flutter.tar.xz
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
