@@ -1,6 +1,7 @@
 env:
-  - channel=stable
-  - FLUTTER_VERSION=1.2.1-${channel}
+  global:
+    - channel=stable
+    - FLUTTER_VERSION=1.2.1-${channel}
 jobs:
   include:
 
