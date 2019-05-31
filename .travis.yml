@@ -1,77 +1,78 @@
 env:
   global:
     - channel=stable
-    - FLUTTER_VERSION=1.2.1-${channel}
+    - FLUTTER_VERSION=1.5.4-hotfix.2
+
 jobs:
   include:
 
-#    - &unit-test-stage
-#      stage: Unit Testing
-#      language: generic
-#      os: linux
-#      env: channel=stable
-#      before_install: # runs on linux only
-#        - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
-#      before_script:
-#        # install pre-compiled flutter
-#        - FLUTTER_VERSION=1.2.1-${channel}
-#        - |
-#          if [ $TRAVIS_OS_NAME == "osx" ]; then
-#            wget --quiet --output-document=flutter.zip https://storage.googleapis.com/flutter_infra/releases/${channel}/macos/flutter_macos_v${FLUTTER_VERSION}.zip && unzip -qq flutter.zip > /dev/null && rm flutter.zip
-#          else
-#            wget --quiet --output-document=flutter.tar.xz https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/flutter_linux_v${FLUTTER_VERSION}.tar.xz && tar xf flutter.tar.xz > /dev/null && rm flutter.tar.xz
-#          fi
-#        - export PATH="$PATH":"$HOME/.pub-cache/bin"
-#        - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
-#        - flutter doctor -v
-#        - |
-#          [[ $TRAVIS_OS_NAME != "linux" && channel != "stable" ]] || pub global activate coverage
-#      script: ./scripts/runTests.sh
-#      after_success: bash <(curl -s https://codecov.io/bash) -f lcov.info
-#    - <<: *unit-test-stage
-#      os: osx
-#      before_install:
-#      after_success:
-#      env: channel=stable
-#    - <<: *unit-test-stage
-#      env: channel=beta
-#      after_success:
-#    - <<: *unit-test-stage
-#      os: osx
-#      env: channel=beta
-#      before_install:
-#      after_success:
-#      env: channel=beta
-#    - <<: *unit-test-stage
-#      env: channel=dev
-#      after_success:
-#    - <<: *unit-test-stage
-#      os: osx
-#      env: channel=dev
-#      before_install:
-#      after_success:
-#    - <<: *unit-test-stage
-#      env: branch=master
-#      before_script:
-#        - git clone https://github.com/flutter/flutter.git -b $branch
-#        - export PATH="$PATH":"$HOME/.pub-cache/bin"
-#        - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
-#        - flutter precache
-#        - flutter doctor -v
-#        - pub global activate coverage
-#      after_success:
-#    - <<: *unit-test-stage
-#      os: osx
-#      env: branch=master
-#      before_install:
-#      before_script:
-#        - git clone https://github.com/flutter/flutter.git -b $branch
-#        - export PATH="$PATH":"$HOME/.pub-cache/bin"
-#        - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
-#        - flutter precache
-#        - flutter doctor -v
-#        - pub global activate coverage
-#      after_success:
+    - &unit-test-stage
+      stage: Unit Testing
+      language: generic
+      os: linux
+      env: channel=stable
+      before_install: # runs on linux only
+        - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
+      before_script:
+        # install pre-compiled flutter
+        - FLUTTER_VERSION=$FLUTTER_VERSION-${channel}
+        - |
+          if [ $TRAVIS_OS_NAME == "osx" ]; then
+            wget --quiet --output-document=flutter.zip https://storage.googleapis.com/flutter_infra/releases/${channel}/macos/flutter_macos_v${FLUTTER_VERSION}.zip && unzip -qq flutter.zip > /dev/null && rm flutter.zip
+          else
+            wget --quiet --output-document=flutter.tar.xz https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/flutter_linux_v${FLUTTER_VERSION}.tar.xz && tar xf flutter.tar.xz > /dev/null && rm flutter.tar.xz
+          fi
+        - export PATH="$PATH":"$HOME/.pub-cache/bin"
+        - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
+        - flutter doctor -v
+        - |
+          [[ $TRAVIS_OS_NAME != "linux" && channel != "stable" ]] || pub global activate coverage
+      script: ./scripts/runTests.sh
+      after_success: bash <(curl -s https://codecov.io/bash) -f lcov.info
+    - <<: *unit-test-stage
+      os: osx
+      before_install:
+      after_success:
+      env: channel=stable
+    - <<: *unit-test-stage
+      env: channel=beta
+      after_success:
+    - <<: *unit-test-stage
+      os: osx
+      env: channel=beta
+      before_install:
+      after_success:
+      env: channel=beta
+    - <<: *unit-test-stage
+      env: channel=dev
+      after_success:
+    - <<: *unit-test-stage
+      os: osx
+      env: channel=dev
+      before_install:
+      after_success:
+    - <<: *unit-test-stage
+      env: branch=master
+      before_script:
+        - git clone https://github.com/flutter/flutter.git -b $branch
+        - export PATH="$PATH":"$HOME/.pub-cache/bin"
+        - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
+        - flutter precache
+        - flutter doctor -v
+        - pub global activate coverage
+      after_success:
+    - <<: *unit-test-stage
+      os: osx
+      env: branch=master
+      before_install:
+      before_script:
+        - git clone https://github.com/flutter/flutter.git -b $branch
+        - export PATH="$PATH":"$HOME/.pub-cache/bin"
+        - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
+        - flutter precache
+        - flutter doctor -v
+        - pub global activate coverage
+      after_success:
 
     - &integration-test-stage
       stage: Integration Testing
@@ -117,15 +118,15 @@ jobs:
         - sdkmanager --list | head -15
         - echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
         - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -gpu swiftshader &
+
         # install pre-compiled flutter
         - sudo apt-get install -y --no-install-recommends lib32stdc++6 libstdc++6 > /dev/null
-#        - sdkmanager "platforms;android-28" "build-tools;28.0.3" > /dev/null # required by flutter
-#        - channel=stable
-#        - FLUTTER_VERSION=1.2.1-${channel}
+        - FLUTTER_VERSION=$FLUTTER_VERSION-${channel}
         - wget --quiet --output-document=flutter.tar.xz https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/flutter_linux_v${FLUTTER_VERSION}.tar.xz && tar xf flutter.tar.xz > /dev/null && rm flutter.tar.xz
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
         - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
         - flutter doctor -v
+
         # Wait for emulator to finish startup.
         - ./scripts/android-wait-for-emulator.sh
         - adb shell input keyevent 82
@@ -147,9 +148,9 @@ jobs:
         - brew install ios-deploy
         - brew install cocoapods || echo 'ignore exit(1)'
         - brew link --overwrite cocoapods
+
         # install pre-compiled flutter
-#        - channel=stable
-#        - FLUTTER_VERSION=1.2.1-${channel}
+        - FLUTTER_VERSION=$FLUTTER_VERSION-${channel}
         - wget --quiet --output-document=flutter.zip https://storage.googleapis.com/flutter_infra/releases/${channel}/macos/flutter_macos_v${FLUTTER_VERSION}.zip && unzip -qq flutter.zip > /dev/null && rm flutter.zip
         - export PATH="$PATH":"$HOME/.pub-cache/bin"
         - export PATH=$PWD/flutter/bin:$PWD/flutter/bin/cache/dart-sdk/bin:$PATH
@@ -165,5 +166,6 @@ jobs:
 
 
   allow_failures:
+    - env: channel=beta
     - env: channel=dev
     - env: branch=master
