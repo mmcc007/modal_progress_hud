@@ -46,28 +46,30 @@ class ModalProgressHUD extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!inAsyncCall) return child;
-
-    Widget layOutProgressIndicator;
-    if (offset == null)
-      layOutProgressIndicator = Center(child: progressIndicator);
-    else {
-      layOutProgressIndicator = Positioned(
-        child: progressIndicator,
-        left: offset.dx,
-        top: offset.dy,
-      );
-    }
-
-    return new Stack(
-      children: [
+    return Stack(
+      children: <Widget>[
         child,
-        new Opacity(
-          child: new ModalBarrier(dismissible: dismissible, color: color),
-          opacity: opacity,
-        ),
-        layOutProgressIndicator,
+        if (inAsyncCall) ..._buildModal(),
       ],
     );
+  }
+
+  List<Widget> _buildModal() {
+    return <Widget>[
+      Opacity(
+        child: ModalBarrier(
+          dismissible: dismissible,
+          color: color,
+        ),
+        opacity: opacity,
+      ),
+      offset == null
+          ? Center(child: progressIndicator)
+          : Positioned(
+              child: progressIndicator,
+              left: offset.dx,
+              top: offset.dy,
+            ),
+    ];
   }
 }
