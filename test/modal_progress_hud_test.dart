@@ -5,9 +5,9 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 void main() {
   group('Modal Progress HUD', () {
-    Widget sut(bool inAsyncCall, Offset offset) {
+    Widget sut(bool inAsyncCall, Offset? offset) {
       return MaterialApp(
-        home: new ModalProgressHUD(
+        home: ModalProgressHUD(
           inAsyncCall: inAsyncCall,
           offset: offset,
           child: Text(''),

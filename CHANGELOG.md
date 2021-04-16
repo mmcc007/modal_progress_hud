@@ -1,3 +1,7 @@
+## [1.0.0]
+* Support for null-safety
+* Example project upgraded to support Android embedding v2 and Flutter web.
+
 ## [0.1.3]
 * Performance optimization
 * Improved docs

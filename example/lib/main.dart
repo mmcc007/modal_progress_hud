@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
 class LoginPage extends StatefulWidget {
   final VoidCallback _onSignIn;
 
-  LoginPage({@required onSignIn})
+  LoginPage({required onSignIn})
       : assert(onSignIn != null),
         _onSignIn = onSignIn;
 
@@ -40,13 +40,13 @@ class _LoginPageState extends State<LoginPage> {
   bool _isInvalidAsyncUser = false; // managed after response from server
   bool _isInvalidAsyncPass = false; // managed after response from server
 
-  String _username;
-  String _password;
+  String? _username;
+  String? _password;
   bool _isLoggedIn = false;
 
   // validate user name
-  String _validateUserName(String userName) {
-    if (userName.length < 8) {
+  String? _validateUserName(String? userName) {
+    if (userName!.length < 8) {
       return 'Username must be at least 8 characters';
     }
 
@@ -60,8 +60,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // validate password
-  String _validatePassword(String password) {
-    if (password.length < 8) {
+  String? _validatePassword(String? password) {
+    if (password!.length < 8) {
       return 'Password must be at least 8 characters';
     }
 
@@ -75,8 +75,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _submit() {
-    if (_loginFormKey.currentState.validate()) {
-      _loginFormKey.currentState.save();
+    if (_loginFormKey.currentState!.validate()) {
+      _loginFormKey.currentState!.save();
 
       // dismiss keyboard during async call
       FocusScope.of(context).requestFocus(new FocusNode());
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
               key: Key('username'),
               decoration: InputDecoration(
                   hintText: 'enter username', labelText: 'User Name'),
-              style: TextStyle(fontSize: 20.0, color: textTheme.button.color),
+              style: TextStyle(fontSize: 20.0, color: textTheme.button!.color),
               validator: _validateUserName,
               onSaved: (value) => _username = value,
             ),
@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
               decoration: InputDecoration(
                   hintText: 'enter password', labelText: 'Password'),
-              style: TextStyle(fontSize: 20.0, color: textTheme.button.color),
+              style: TextStyle(fontSize: 20.0, color: textTheme.button!.color),
               validator: _validatePassword,
               onSaved: (value) => _password = value,
             ),

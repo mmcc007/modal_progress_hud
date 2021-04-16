@@ -17,7 +17,7 @@ void main() {
     final secretUsername = 'username1';
     final secretPassword = 'password1';
 
-    bool isLoggedIn;
+    bool? isLoggedIn;
     final sut = MaterialApp(
       theme: ThemeData(),
       home: LoginPage(onSignIn: () => isLoggedIn = true),
