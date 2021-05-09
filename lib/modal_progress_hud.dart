@@ -48,11 +48,11 @@ class ModalProgressHUD extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!inAsyncCall) return child;
 
-    return new Stack(
+    return Stack(
       children: [
         child,
-        new Opacity(
-          child: new ModalBarrier(dismissible: dismissible, color: color),
+        Opacity(
+          child: ModalBarrier(dismissible: dismissible, color: color),
           opacity: opacity,
         ),
         _getLayOutProgressIndicator(),
