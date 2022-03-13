@@ -27,19 +27,19 @@ class ModalProgressHUD extends StatelessWidget {
   final double opacity;
   final Color color;
   final Widget progressIndicator;
-  final Offset offset;
+  final Offset? offset;
   final bool dismissible;
   final Widget child;
 
   ModalProgressHUD({
-    Key key,
-    @required this.inAsyncCall,
+    Key? key,
+    required this.inAsyncCall,
     this.opacity = 0.3,
     this.color = Colors.grey,
     this.progressIndicator = const CircularProgressIndicator(),
     this.offset,
     this.dismissible = false,
-    @required this.child,
+    required this.child,
   })  : assert(child != null),
         assert(inAsyncCall != null),
         super(key: key);
@@ -54,8 +54,8 @@ class ModalProgressHUD extends StatelessWidget {
     else {
       layOutProgressIndicator = Positioned(
         child: progressIndicator,
-        left: offset.dx,
-        top: offset.dy,
+        left: offset!.dx,
+        top: offset!.dy,
       );
     }
 
